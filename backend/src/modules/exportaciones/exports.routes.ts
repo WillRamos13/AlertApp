@@ -1,0 +1,12 @@
+import { Router } from 'express';
+import { authenticate } from '../../middlewares/authenticate';
+import { authorizeRoles } from '../../middlewares/authorizeRoles';
+import { csrfProtection } from '../../middlewares/csrfProtection';
+import { asyncHandler } from '../../shared/utils/asyncHandler';
+import * as c from './exports.controller';
+export const exportsRouter=Router();
+exportsRouter.use(authenticate,authorizeRoles('ADMIN'));
+exportsRouter.get('/',asyncHandler(c.listExports));
+exportsRouter.post('/reportes',csrfProtection,asyncHandler(c.exportReports));
+exportsRouter.post('/logs',csrfProtection,asyncHandler(c.exportLogs));
+exportsRouter.get('/backup-estado',asyncHandler(c.backupStatus));

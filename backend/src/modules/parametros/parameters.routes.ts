@@ -1,0 +1,11 @@
+import { Router } from 'express';
+import { authenticate } from '../../middlewares/authenticate';
+import { authorizeRoles } from '../../middlewares/authorizeRoles';
+import { csrfProtection } from '../../middlewares/csrfProtection';
+import { asyncHandler } from '../../shared/utils/asyncHandler';
+import * as c from './parameters.controller';
+export const parametersRouter=Router();
+parametersRouter.use(authenticate,authorizeRoles('ADMIN'));
+parametersRouter.get('/',asyncHandler(c.listParameters));
+parametersRouter.patch('/:clave',csrfProtection,asyncHandler(c.updateParameter));
+parametersRouter.patch('/tipos-incidente/:id/estado',csrfProtection,asyncHandler(c.toggleIncidentType));

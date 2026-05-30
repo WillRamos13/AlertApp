@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Builds and coverage
+**/dist/
+**/coverage/
+
+# Environment secrets
+.env
+.env.*
+!.env.example
+!.env.test.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS and editor
+.DS_Store
+.vscode/
+.idea/
+
+# Uploads / temporary outputs
+uploads/
+**/uploads/
+exports/
+**/exports/
+tmp/
+*.zip

@@ -1,0 +1,12 @@
+import { Router } from 'express';
+import { authenticate } from '../../middlewares/authenticate';
+import { authorizeRoles } from '../../middlewares/authorizeRoles';
+import { csrfProtection } from '../../middlewares/csrfProtection';
+import { asyncHandler } from '../../shared/utils/asyncHandler';
+import * as controller from './agent.controller';
+export const agentRouter = Router();
+agentRouter.use(authenticate, authorizeRoles('AGENTE'));
+agentRouter.get('/dashboard', asyncHandler(controller.dashboard));
+agentRouter.get('/reportes/pendientes', asyncHandler(controller.pendingReports));
+agentRouter.get('/reportes/:id', asyncHandler(controller.reportDetail));
+agentRouter.post('/reportes/:id/validacion', csrfProtection, asyncHandler(controller.decideReport));

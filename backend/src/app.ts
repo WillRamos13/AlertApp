@@ -1,0 +1,47 @@
+import cookieParser from 'cookie-parser';
+import express from 'express';
+import helmet from 'helmet';
+import { corsMiddleware } from './config/cors';
+import { apiLimiter } from './middlewares/rateLimiters';
+import { errorHandler } from './middlewares/errorHandler';
+import { notFound } from './middlewares/notFound';
+import { accessRouter } from './modules/access/access.routes';
+import { adminRouter } from './modules/admin/admin.routes';
+import { agentRouter } from './modules/agente/agent.routes';
+import { announcementsRouter } from './modules/comunicados/announcements.routes';
+import { authRouter } from './modules/auth/auth.routes';
+import { catalogsRouter } from './modules/catalogs/catalogs.routes';
+import { exportsRouter } from './modules/exportaciones/exports.routes';
+import { healthRouter } from './modules/health/health.routes';
+import { mapRouter } from './modules/mapa/map.routes';
+import { parametersRouter } from './modules/parametros/parameters.routes';
+import { reportsRouter } from './modules/reportes/reports.routes';
+import { statisticsRouter } from './modules/estadisticas/statistics.routes';
+
+export function createApp() {
+  const app = express();
+  app.disable('x-powered-by');
+  app.set('trust proxy', 1);
+  app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
+  app.use(corsMiddleware);
+  app.use(express.json({ limit: '2mb' }));
+  app.use(express.urlencoded({ extended: false }));
+  app.use(cookieParser());
+  app.use('/api/v1', apiLimiter);
+  app.get('/', (_request, response) => response.json({ ok: true, data: { name: 'AlertApp API', version: '0.3.0', phase: '4 - auditada' } }));
+  app.use('/api/v1/health', healthRouter);
+  app.use('/api/v1/auth', authRouter);
+  app.use('/api/v1/catalogos', catalogsRouter);
+  app.use('/api/v1/acceso', accessRouter);
+  app.use('/api/v1/mapa', mapRouter);
+  app.use('/api/v1/reportes', reportsRouter);
+  app.use('/api/v1/agente', agentRouter);
+  app.use('/api/v1/estadisticas', statisticsRouter);
+  app.use('/api/v1/comunicados', announcementsRouter);
+  app.use('/api/v1/admin/parametros', parametersRouter);
+  app.use('/api/v1/admin/exportaciones', exportsRouter);
+  app.use('/api/v1/admin', adminRouter);
+  app.use(notFound);
+  app.use(errorHandler);
+  return app;
+}

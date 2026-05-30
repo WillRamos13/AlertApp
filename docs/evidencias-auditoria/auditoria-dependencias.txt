@@ -1,0 +1,21 @@
+npm audit --omit=dev:
+{
+  "info": 0,
+  "low": 0,
+  "moderate": 0,
+  "high": 0,
+  "critical": 0,
+  "total": 0
+}
+
+npm audit incluyendo herramientas de desarrollo:
+{
+  "info": 0,
+  "low": 0,
+  "moderate": 4,
+  "high": 0,
+  "critical": 0,
+  "total": 4
+}
+
+Alertas residuales: drizzle-kit y dependencias transitivas de esbuild en tooling de desarrollo.

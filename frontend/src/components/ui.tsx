@@ -1,0 +1,8 @@
+import { AlertTriangle, CheckCircle2, Clock3, XCircle } from 'lucide-react';
+import type { ReportStatus } from '../types';
+export function Logo({light=false}:{light?:boolean}){return <div className="flex items-center gap-2 font-bold text-lg"><span className="grid h-9 w-9 place-items-center rounded-xl bg-blue-600 text-white">A</span><span className={light?'text-white':'text-slate-900'}>AlertApp</span></div>}
+export function StatusBadge({status}:{status:ReportStatus}){ if(status==='VALIDADO')return <span className="badge-valid"><CheckCircle2 size={13}/> Validado</span>; if(status==='RECHAZADO')return <span className="badge-rejected"><XCircle size={13}/> Rechazado</span>; if(status==='RETIRADO')return <span className="badge bg-slate-100 text-slate-600"><XCircle size={13}/> Retirado</span>; return <span className="badge-pending"><Clock3 size={13}/> No verificado</span>; }
+export function Disclaimer(){return <div className="warning flex gap-2"><AlertTriangle className="shrink-0" size={20}/><span>AlertApp no reemplaza una denuncia formal ante las autoridades ni una llamada a servicios de emergencia. Los reportes pendientes son ciudadanos y aún no han sido verificados.</span></div>}
+export function EmptyState({title,text}:{title:string;text:string}){return <div className="empty"><h3 className="font-semibold text-slate-700">{title}</h3><p className="mt-2 text-sm">{text}</p></div>}
+export function ErrorPanel({message}:{message:string}){return <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">{message}</div>}
+export function Spinner(){return <div className="page-loader">Cargando información...</div>}

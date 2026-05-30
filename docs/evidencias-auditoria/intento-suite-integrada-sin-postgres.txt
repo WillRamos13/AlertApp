@@ -1,0 +1,52 @@
+
+> alertapp@0.3.0 test
+> npm run test --workspace backend
+
+
+> @alertapp/backend@0.3.0 test
+> npm run test:prepare && cross-env NODE_ENV=test ENV_FILE=.env.test.example vitest run
+
+
+> @alertapp/backend@0.3.0 test:prepare
+> cross-env NODE_ENV=test ENV_FILE=.env.test.example tsx tests/prepare-db.ts
+
+◇ injected env (32) from .env.test.example // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+No se pudo preparar la base de pruebas: DrizzleQueryError: Failed query: CREATE SCHEMA IF NOT EXISTS "drizzle"
+params: 
+    at NodePgPreparedQuery.queryWithCache (/mnt/data/AlertApp-Fase4-auditwork/node_modules/src/pg-core/session.ts:73:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async PgDialect.migrate (/mnt/data/AlertApp-Fase4-auditwork/node_modules/src/pg-core/dialect.ts:85:3)
+    ... 2 lines matching cause stack trace ...
+    at async prepareTestDatabase (/mnt/data/AlertApp-Fase4-auditwork/backend/tests/prepare-db.ts:6:3) {
+  query: 'CREATE SCHEMA IF NOT EXISTS "drizzle"',
+  params: [],
+  cause: Error: connect ECONNREFUSED 127.0.0.1:5432
+      at /mnt/data/AlertApp-Fase4-auditwork/node_modules/pg-pool/index.js:45:11
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async <anonymous> (/mnt/data/AlertApp-Fase4-auditwork/node_modules/src/node-postgres/session.ts:149:14)
+      at async NodePgPreparedQuery.queryWithCache (/mnt/data/AlertApp-Fase4-auditwork/node_modules/src/pg-core/session.ts:71:12)
+      at async PgDialect.migrate (/mnt/data/AlertApp-Fase4-auditwork/node_modules/src/pg-core/dialect.ts:85:3)
+      at async migrate (/mnt/data/AlertApp-Fase4-auditwork/node_modules/src/node-postgres/migrator.ts:10:2)
+      at async runMigrations (/mnt/data/AlertApp-Fase4-auditwork/backend/src/db/migrate.ts:7:3)
+      at async prepareTestDatabase (/mnt/data/AlertApp-Fase4-auditwork/backend/tests/prepare-db.ts:6:3) {
+    errno: -111,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 5432
+  }
+}
+npm error Lifecycle script `test:prepare` failed with error:
+npm error code 1
+npm error path /mnt/data/AlertApp-Fase4-auditwork/backend
+npm error workspace @alertapp/backend@0.3.0
+npm error location /mnt/data/AlertApp-Fase4-auditwork/backend
+npm error command failed
+npm error command sh -c cross-env NODE_ENV=test ENV_FILE=.env.test.example tsx tests/prepare-db.ts
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path /mnt/data/AlertApp-Fase4-auditwork/backend
+npm error workspace @alertapp/backend@0.3.0
+npm error location /mnt/data/AlertApp-Fase4-auditwork/backend
+npm error command failed
+npm error command sh -c npm run test:prepare && cross-env NODE_ENV=test ENV_FILE=.env.test.example vitest run

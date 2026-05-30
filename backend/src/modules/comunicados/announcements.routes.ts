@@ -1,0 +1,15 @@
+import { Router } from 'express';
+import { authenticate } from '../../middlewares/authenticate';
+import { authorizeRoles } from '../../middlewares/authorizeRoles';
+import { csrfProtection } from '../../middlewares/csrfProtection';
+import { asyncHandler } from '../../shared/utils/asyncHandler';
+import * as controller from './announcements.controller';
+export const announcementsRouter=Router();
+announcementsRouter.get('/',asyncHandler(controller.listPublic));
+announcementsRouter.get('/publicos/:id',asyncHandler(controller.getPublic));
+announcementsRouter.use('/gestion',authenticate,authorizeRoles('AGENTE','ADMIN'));
+announcementsRouter.get('/gestion/lista',authenticate,authorizeRoles('AGENTE','ADMIN'),asyncHandler(controller.listManaged));
+announcementsRouter.post('/gestion',authenticate,authorizeRoles('AGENTE','ADMIN'),csrfProtection,asyncHandler(controller.create));
+announcementsRouter.patch('/gestion/:id',authenticate,authorizeRoles('AGENTE','ADMIN'),csrfProtection,asyncHandler(controller.update));
+announcementsRouter.post('/gestion/:id/publicar',authenticate,authorizeRoles('AGENTE','ADMIN'),csrfProtection,asyncHandler(controller.publish));
+announcementsRouter.post('/gestion/:id/archivar',authenticate,authorizeRoles('AGENTE','ADMIN'),csrfProtection,asyncHandler(controller.archive));

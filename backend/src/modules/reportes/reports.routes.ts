@@ -1,0 +1,18 @@
+import { Router } from 'express';
+import { authenticate } from '../../middlewares/authenticate';
+import { authorizeRoles } from '../../middlewares/authorizeRoles';
+import { csrfProtection } from '../../middlewares/csrfProtection';
+import { optionalAuthenticate } from '../../middlewares/optionalAuthenticate';
+import { evidenceUpload } from '../../middlewares/evidenceUpload';
+import { env } from '../../config/env';
+import { asyncHandler } from '../../shared/utils/asyncHandler';
+import * as controller from './reports.controller';
+export const reportsRouter = Router();
+reportsRouter.get('/publicos', asyncHandler(controller.listPublicMapReports));
+reportsRouter.get('/publicos/:id', asyncHandler(controller.getPublicReport));
+reportsRouter.get('/evidencias/:id/acceso', optionalAuthenticate, asyncHandler(controller.accessEvidence));
+reportsRouter.use(authenticate);
+reportsRouter.post('/', authorizeRoles('CIUDADANO'), csrfProtection, evidenceUpload.array('evidencias', env.MAX_EVIDENCES_PER_REPORT), asyncHandler(controller.createReport));
+reportsRouter.get('/mios', authorizeRoles('CIUDADANO'), asyncHandler(controller.listMyReports));
+reportsRouter.get('/mios/:id', authorizeRoles('CIUDADANO'), asyncHandler(controller.getMyReport));
+reportsRouter.patch('/:id/retirar', authorizeRoles('CIUDADANO'), csrfProtection, asyncHandler(controller.withdrawReport));
